@@ -5,13 +5,13 @@ meta {
 }
 
 post {
-  url: https://fish.lucahaverty.com/api/jobs
+  url: {{BASE_URL}}/api/jobs
   body: json
   auth: inherit
 }
 
 body:json {
-  {"amount_grams": 8, "source": "manual"}
+  {"type": "feed"}
 }
 
 settings {

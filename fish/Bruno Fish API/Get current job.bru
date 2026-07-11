@@ -1,11 +1,11 @@
 meta {
-  name: Get recent job
+  name: Get current job
   type: http
   seq: 4
 }
 
 get {
-  url: https://fish.lucahaverty.com/api/jobs/latest
+  url: {{BASE_URL}}/api/jobs/current
   body: none
   auth: inherit
 }

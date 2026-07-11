@@ -86,7 +86,6 @@ const styles = `
 function App() {
   const [baseUrl, setBaseUrl] = useState("http://localhost:5000");
 
-  const [amount, setAmount] = useState(5);
   const [queueResult, setQueueResult] = useState("");
 
   const [latestJob, setLatestJob] = useState<FeedJob | null>(null);
@@ -127,7 +126,7 @@ function App() {
           time: e.time,
           amount_grams: e.amount_grams,
           enabled: !!e.enabled,
-        }))
+        })),
       );
     } catch (err) {
       setScheduleError((err as Error).message);
@@ -140,12 +139,12 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function queueJob() {
+  async function queueJob(jobType: string) {
     setQueueResult("Queuing...");
     try {
       const job = await api("/api/jobs", {
         method: "POST",
-        body: JSON.stringify({ amount_grams: amount }),
+        body: JSON.stringify({ type: jobType }),
       });
       setQueueResult(JSON.stringify(job, null, 2));
       await refreshLatestJob();
@@ -154,10 +153,22 @@ function App() {
     }
   }
 
+  function feed() {
+    queueJob("feed");
+  }
+  function seekLeft() {
+    queueJob("seekLeft");
+  }
+  function seekRight() {
+    queueJob("seekRight");
+  }
+
   async function completeJob() {
     if (!latestJob) return;
     try {
-      const job = await api(`/api/jobs/${latestJob.id}/complete`, { method: "PATCH" });
+      const job = await api(`/api/jobs/${latestJob.id}/complete`, {
+        method: "PATCH",
+      });
       setLatestJob(job);
       await refreshLatestJob();
     } catch (err) {
@@ -168,15 +179,18 @@ function App() {
   function updateRow<K extends keyof ScheduleEntry>(
     index: number,
     field: K,
-    value: ScheduleEntry[K]
+    value: ScheduleEntry[K],
   ) {
     setSchedule((prev) =>
-      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row))
+      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
     );
   }
 
   function addRow() {
-    setSchedule((prev) => [...prev, { time: "08:00", amount_grams: 5, enabled: true }]);
+    setSchedule((prev) => [
+      ...prev,
+      { time: "08:00", amount_grams: 5, enabled: true },
+    ]);
   }
 
   function removeRow(index: number) {
@@ -201,7 +215,9 @@ function App() {
       <style>{styles}</style>
 
       <h1>Fish Autofeeder Control</h1>
-      <p className="subtitle">Queue feedings, check job status, and manage the schedule.</p>
+      <p className="subtitle">
+        Queue feedings, check job status, and manage the schedule.
+      </p>
 
       <div className="config">
         <label htmlFor="baseUrl">Backend URL</label>
@@ -216,7 +232,7 @@ function App() {
       <section>
         <h2>Queue a feed job</h2>
         <div className="row">
-          <div>
+          {/* <div>
             <label htmlFor="amount">Amount (grams)</label>
             <input
               id="amount"
@@ -225,8 +241,10 @@ function App() {
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
             />
-          </div>
-          <button onClick={queueJob}>Queue feed</button>
+          </div> */}
+          <button onClick={seekLeft}>{"< Seek"}</button>
+          <button onClick={feed}>Feed</button>
+          <button onClick={seekRight}>{"Seek >"}</button>
         </div>
         {queueResult && <div className="status-box">{queueResult}</div>}
       </section>
@@ -275,7 +293,9 @@ function App() {
                     min={1}
                     style={{ width: 70 }}
                     value={entry.amount_grams}
-                    onChange={(e) => updateRow(i, "amount_grams", Number(e.target.value))}
+                    onChange={(e) =>
+                      updateRow(i, "amount_grams", Number(e.target.value))
+                    }
                   />
                 </td>
                 <td>
