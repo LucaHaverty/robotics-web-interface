@@ -1,0 +1,59 @@
+# NGINX CONFIGURATION
+
+## Main Config
+/etc/nginx/nginx.conf
+
+## Project config
+/etc/nginx/conf.d/fish.conf
+
+# ENTRIES
+
+- fish: locahost:5000
+- lights: localhost:5001
+
+# SETTING UP A NEW PROJECT
+
+1. Add DNS entry on godaddy dashboard
+2. Create a run express server (test LOCALLY ON VM with curl http://localhost:<PORT>)
+3. Create Nginx config sudo nano /etc/nginx/conf.d/<NAME>.conf
+```conf
+server {
+    listen 80;
+    server_name <NAME>.lucahaverty.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:<PORT>;
+
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+4. sudo nginx -t (should get `test is successful`) 
+5. sudo systemctl reload nginx
+6. Test HTTP in new incognito window http://<NAME>.lucahaverty.com
+7. Setup https with sudo certbot --nginx
+8. Test https://<NAME>.lucahaverty.com
+
+# GIT SETUP
+
+Install git
+sudo apt update
+sudo apt install git -y
+
+Generate key
+ssh-keygen -t ed25519 -C "oracle-server"
+
+Copy ENTIRE LINE PRINTED
+cat ~/.ssh/id_ed25519.pub
+
+Add key to GIT
+
+Test with
+ssh -T git@github.com
+
+Clone repo

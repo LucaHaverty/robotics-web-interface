@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import Database from "better-sqlite3";
 
+const PORT: number = 5000;
+
 const db = new Database("database.db");
 
 db.exec(`
@@ -23,6 +25,6 @@ app.get("/api/test", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server started");
 });
