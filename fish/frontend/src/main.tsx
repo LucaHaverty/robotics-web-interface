@@ -119,7 +119,7 @@ function App() {
           time: e.time,
           amount_grams: e.amount_grams,
           enabled: !!e.enabled,
-        }))
+        })),
       );
     } catch (err) {
       setScheduleError((err as Error).message);
@@ -149,7 +149,9 @@ function App() {
   async function completeJob() {
     if (!latestJob) return;
     try {
-      const job = await api(`/api/jobs/${latestJob.id}/complete`, { method: "PATCH" });
+      const job = await api(`/api/jobs/${latestJob.id}/complete`, {
+        method: "PATCH",
+      });
       setLatestJob(job);
       await refreshLatestJob();
     } catch (err) {
@@ -157,14 +159,21 @@ function App() {
     }
   }
 
-  function updateRow(index: number, field: keyof ScheduleEntry, value: string | boolean) {
+  function updateRow<K extends keyof ScheduleEntry>(
+    index: number,
+    field: K,
+    value: ScheduleEntry[K],
+  ) {
     setSchedule((prev) =>
-      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row))
+      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
     );
   }
 
   function addRow() {
-    setSchedule((prev) => [...prev, { time: "08:00", amount_grams: 5, enabled: true }]);
+    setSchedule((prev) => [
+      ...prev,
+      { time: "08:00", amount_grams: 5, enabled: true },
+    ]);
   }
 
   function removeRow(index: number) {
@@ -189,7 +198,9 @@ function App() {
       <style>{styles}</style>
 
       <h1>Fish Autofeeder Control</h1>
-      <p className="subtitle">Queue feedings, check job status, and manage the schedule.</p>
+      <p className="subtitle">
+        Queue feedings, check job status, and manage the schedule.
+      </p>
 
       <div className="config">
         <label htmlFor="baseUrl">Backend URL</label>
@@ -263,7 +274,9 @@ function App() {
                     min={1}
                     style={{ width: 70 }}
                     value={entry.amount_grams}
-                    onChange={(e) => updateRow(i, "amount_grams", Number(e.target.value))}
+                    onChange={(e) =>
+                      updateRow(i, "amount_grams", Number(e.target.value))
+                    }
                   />
                 </td>
                 <td>

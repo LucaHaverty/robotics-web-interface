@@ -1,0 +1,15 @@
+meta {
+  name: Mark job complete
+  type: http
+  seq: 5
+}
+
+patch {
+  url: https://fish.lucahaverty.com/api/jobs/2/complete
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

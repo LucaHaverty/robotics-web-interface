@@ -1,0 +1,19 @@
+meta {
+  name: Queue Feed Job
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://fish.lucahaverty.com/api/jobs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"amount_grams": 8, "source": "manual"}
+}
+
+settings {
+  encodeUrl: true
+}

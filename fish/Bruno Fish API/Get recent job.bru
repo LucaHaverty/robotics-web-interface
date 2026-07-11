@@ -1,0 +1,15 @@
+meta {
+  name: Get recent job
+  type: http
+  seq: 4
+}
+
+get {
+  url: https://fish.lucahaverty.com/api/jobs/latest
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
