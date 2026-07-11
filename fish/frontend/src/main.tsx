@@ -18,34 +18,39 @@ interface ScheduleEntry {
 
 const styles = `
   * { box-sizing: border-box; }
-  body { margin: 0; }
+  body { margin: 0; background: #16181c; }
   .app {
     font-family: system-ui, sans-serif;
     max-width: 640px;
     margin: 2rem auto;
     padding: 0 1rem;
-    color: #1a1a1a;
-    background: #fafafa;
+    color: #e6e6e6;
+    background: #16181c;
   }
-  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
-  .subtitle { color: #666; margin-top: 0; margin-bottom: 2rem; }
+  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; color: #f2f2f2; }
+  .subtitle { color: #9a9a9a; margin-top: 0; margin-bottom: 2rem; }
   section {
-    background: #fff;
-    border: 1px solid #ddd;
+    background: #1e2126;
+    border: 1px solid #2e3238;
     border-radius: 8px;
     padding: 1rem 1.25rem;
     margin-bottom: 1.5rem;
   }
-  section h2 { font-size: 1rem; margin-top: 0; }
-  label { display: block; font-size: 0.85rem; color: #444; margin-bottom: 0.25rem; }
+  section h2 { font-size: 1rem; margin-top: 0; color: #f2f2f2; }
+  label { display: block; font-size: 0.85rem; color: #aaa; margin-bottom: 0.25rem; }
   input[type="number"], input[type="time"], input[type="text"] {
     padding: 0.4rem;
-    border: 1px solid #ccc;
+    border: 1px solid #3a3f47;
     border-radius: 4px;
     font-size: 0.9rem;
+    background: #101317;
+    color: #e6e6e6;
+  }
+  input[type="number"]::-webkit-inner-spin-button {
+    filter: invert(1);
   }
   button {
-    background: #2a6f4d;
+    background: #3a9d6e;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -55,23 +60,26 @@ const styles = `
     margin-top: 0.5rem;
     margin-right: 0.5rem;
   }
-  button.secondary { background: #555; }
-  button.danger { background: #a33; }
-  button:disabled { background: #aaa; cursor: not-allowed; }
+  button.secondary { background: #3a3f47; }
+  button.danger { background: #b8433f; }
+  button:disabled { background: #444; color: #888; cursor: not-allowed; }
   .row { display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; }
   .status-box {
-    background: #f3f3f3;
+    background: #101317;
+    border: 1px solid #2e3238;
     border-radius: 6px;
     padding: 0.75rem;
     font-size: 0.85rem;
     margin-top: 0.75rem;
     white-space: pre-wrap;
     font-family: ui-monospace, monospace;
+    color: #d0d0d0;
   }
   table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
-  th, td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #eee; font-size: 0.85rem; }
-  .error { color: #a33; font-size: 0.85rem; margin-top: 0.5rem; }
-  .config { font-size: 0.8rem; color: #666; margin-bottom: 1.5rem; }
+  th, td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #2e3238; font-size: 0.85rem; }
+  th { color: #aaa; }
+  .error { color: #e08681; font-size: 0.85rem; margin-top: 0.5rem; }
+  .config { font-size: 0.8rem; color: #9a9a9a; margin-bottom: 1.5rem; }
   .config input { width: 220px; }
 `;
 
@@ -119,7 +127,7 @@ function App() {
           time: e.time,
           amount_grams: e.amount_grams,
           enabled: !!e.enabled,
-        })),
+        }))
       );
     } catch (err) {
       setScheduleError((err as Error).message);
@@ -149,9 +157,7 @@ function App() {
   async function completeJob() {
     if (!latestJob) return;
     try {
-      const job = await api(`/api/jobs/${latestJob.id}/complete`, {
-        method: "PATCH",
-      });
+      const job = await api(`/api/jobs/${latestJob.id}/complete`, { method: "PATCH" });
       setLatestJob(job);
       await refreshLatestJob();
     } catch (err) {
@@ -162,18 +168,15 @@ function App() {
   function updateRow<K extends keyof ScheduleEntry>(
     index: number,
     field: K,
-    value: ScheduleEntry[K],
+    value: ScheduleEntry[K]
   ) {
     setSchedule((prev) =>
-      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)),
+      prev.map((row, i) => (i === index ? { ...row, [field]: value } : row))
     );
   }
 
   function addRow() {
-    setSchedule((prev) => [
-      ...prev,
-      { time: "08:00", amount_grams: 5, enabled: true },
-    ]);
+    setSchedule((prev) => [...prev, { time: "08:00", amount_grams: 5, enabled: true }]);
   }
 
   function removeRow(index: number) {
@@ -198,9 +201,7 @@ function App() {
       <style>{styles}</style>
 
       <h1>Fish Autofeeder Control</h1>
-      <p className="subtitle">
-        Queue feedings, check job status, and manage the schedule.
-      </p>
+      <p className="subtitle">Queue feedings, check job status, and manage the schedule.</p>
 
       <div className="config">
         <label htmlFor="baseUrl">Backend URL</label>
@@ -274,9 +275,7 @@ function App() {
                     min={1}
                     style={{ width: 70 }}
                     value={entry.amount_grams}
-                    onChange={(e) =>
-                      updateRow(i, "amount_grams", Number(e.target.value))
-                    }
+                    onChange={(e) => updateRow(i, "amount_grams", Number(e.target.value))}
                   />
                 </td>
                 <td>
