@@ -28,6 +28,22 @@ router.post("/", (req, res) => {
   res.status(201).json(job);
 });
 
+router.post("/log-feed", (req, res) => {
+  console.log("LOGGING SCHEDULED FEED JOB");
+  const insertJob = db.prepare(
+    `INSERT INTO feed_jobs (type, status, source, completed_at) VALUES ('feed', 'completed', 'scheduled', strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
+  );
+
+  const job = db.transaction(() => {
+    const info = insertJob.run();
+    return db
+      .prepare(`SELECT * FROM feed_jobs WHERE id = ?`)
+      .get(info.lastInsertRowid) as Job;
+  })();
+
+  res.status(201).json(job);
+});
+
 /** Return the job at the front of the queue */
 router.get("/sync", (req, res) => {
   const job = db
