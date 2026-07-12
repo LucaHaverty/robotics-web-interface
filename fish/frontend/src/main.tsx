@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 
 interface FeedJob {
@@ -88,9 +88,53 @@ function App() {
 
   const [latestJob, setLatestJob] = useState<FeedJob | null>(null);
   const [latestJobError, setLatestJobError] = useState("");
-
   const [schedule, setSchedule] = useState<ScheduleEntry[]>([]);
   const [scheduleError, setScheduleError] = useState("");
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">(
+    "idle",
+  );
+
+  // Prevents the autosave effect from firing when `schedule` was just
+  // overwritten by data coming FROM the server (initial load, or the
+  // reload that happens after a save) rather than a user edit.
+  const skipNextAutosave = useRef(true); // true so the very first load doesn't trigger a save
+
+  async function loadSchedule() {
+    setScheduleError("");
+    try {
+      const entries = await api("/api/schedule");
+      skipNextAutosave.current = true;
+      setSchedule(
+        entries.map((e: any) => ({
+          time: e.time,
+          enabled: !!e.enabled,
+        })),
+      );
+    } catch (err) {
+      setScheduleError((err as Error).message);
+    }
+  }
+
+  useEffect(() => {
+    refreshLatestJob();
+    loadSchedule();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Autosave: fires whenever `schedule` changes as a result of a user
+  // edit (add/remove/update row). Debounced so rapid edits (e.g. typing)
+  // collapse into a single request.
+  useEffect(() => {
+    if (skipNextAutosave.current) {
+      skipNextAutosave.current = false;
+      return;
+    }
+    const timeout = setTimeout(() => {
+      saveSchedule();
+    }, 500);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schedule]);
 
   async function api(path: string, options: RequestInit = {}) {
     const res = await fetch(baseUrl.replace(/\/$/, "") + path, {
@@ -112,21 +156,6 @@ function App() {
     } catch (err) {
       setLatestJob(null);
       setLatestJobError((err as Error).message);
-    }
-  }
-
-  async function loadSchedule() {
-    setScheduleError("");
-    try {
-      const entries = await api("/api/schedule");
-      setSchedule(
-        entries.map((e: any) => ({
-          time: e.time,
-          enabled: !!e.enabled,
-        })),
-      );
-    } catch (err) {
-      setScheduleError((err as Error).message);
     }
   }
 
@@ -159,20 +188,6 @@ function App() {
   function seekRight() {
     queueJob("seekRight");
   }
-
-  async function completeJob() {
-    if (!latestJob) return;
-    try {
-      const job = await api(`/api/jobs/${latestJob.id}/complete`, {
-        method: "PATCH",
-      });
-      setLatestJob(job);
-      await refreshLatestJob();
-    } catch (err) {
-      setLatestJobError((err as Error).message);
-    }
-  }
-
   function updateRow<K extends keyof ScheduleEntry>(
     index: number,
     field: K,
@@ -184,7 +199,7 @@ function App() {
   }
 
   function addRow() {
-    setSchedule((prev) => [...prev, { time: "08:00", enabled: true }]);
+    setSchedule((prev) => [...prev, { time: "08:00", enabled: false }]);
   }
 
   function removeRow(index: number) {
@@ -193,13 +208,18 @@ function App() {
 
   async function saveSchedule() {
     setScheduleError("");
+    setSaveStatus("saving");
     try {
       await api("/api/schedule", {
         method: "PUT",
         body: JSON.stringify({ schedule }),
       });
+      skipNextAutosave.current = true;
       await loadSchedule();
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 1500);
     } catch (err) {
+      setSaveStatus("idle");
       setScheduleError((err as Error).message);
     }
   }

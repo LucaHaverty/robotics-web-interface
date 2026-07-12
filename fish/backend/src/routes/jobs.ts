@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { Job, JOB_TYPES, JobSource, JobType, ScheduleEntry } from "../types";
-import { JobsService } from "../services/jobs";
+import { Job, JOB_TYPES, JobType, ScheduleEntry } from "../types";
 import db from "../db/database";
 
 const router = Router();
@@ -52,11 +51,20 @@ router.get("/sync", (req, res) => {
     )
     .get() as Job | undefined;
 
-  const schedule = db
-    .prepare(`SELECT * FROM feeding_schedule ORDER BY time ASC LIMIT 1`)
-    .get() as ScheduleEntry | undefined;
+  const schedulesRaw = db
+    .prepare(`SELECT * FROM feeding_schedule ORDER BY time`)
+    .all() as ScheduleEntry[] | undefined;
 
-  res.json({ time: Date.now() / 1000, job, schedule: schedule?.time ?? "" });
+  let schedules: string[] =
+    schedulesRaw
+      ?.map((s) => (s.enabled ? s.time : undefined))
+      .filter((s) => s !== undefined) ?? [];
+
+  res.json({
+    time: Date.now() / 1000,
+    job,
+    schedule: schedules,
+  });
 });
 
 /** Mark a job as complete */

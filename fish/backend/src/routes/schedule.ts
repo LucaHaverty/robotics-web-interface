@@ -23,12 +23,6 @@ router.put("/", (req, res) => {
     if (typeof entry.time !== "string" || !TIME_RE.test(entry.time)) {
       return res.status(400).json({ error: `Invalid time: ${entry.time}` });
     }
-    const amt = Number(entry.amount_grams);
-    if (!Number.isFinite(amt) || amt <= 0) {
-      return res
-        .status(400)
-        .json({ error: `Invalid amount_grams for ${entry.time}` });
-    }
   }
 
   const clearSchedule = db.prepare(`DELETE FROM feeding_schedule`);
@@ -41,13 +35,15 @@ router.put("/", (req, res) => {
 
   const saved = db.transaction(() => {
     clearSchedule.run();
-    const entry = schedule[0];
-    if (entry) {
-      insertEntry.run(
-        entry.time,
-        // Number(entry.amount_grams),
-        entry.enabled === false ? 0 : 1,
-      );
+    // const entry = schedule[0];
+    for (const entry of schedule) {
+      if (entry) {
+        insertEntry.run(
+          entry.time,
+          // Number(entry.amount_grams),
+          entry.enabled === false ? 0 : 1,
+        );
+      }
     }
 
     const newSchedule = db
