@@ -82,7 +82,7 @@ const styles = `
 `;
 
 function App() {
-  const [baseUrl, setBaseUrl] = useState("http://localhost:5000");
+  const [baseUrl, setBaseUrl] = useState("https://fish.lucahaverty.com");
 
   const [queueResult, setQueueResult] = useState("");
 
@@ -90,7 +90,7 @@ function App() {
   const [latestJobError, setLatestJobError] = useState("");
   const [schedule, setSchedule] = useState<ScheduleEntry[]>([]);
   const [scheduleError, setScheduleError] = useState("");
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">(
+  const [_, setSaveStatus] = useState<"idle" | "saving" | "saved">(
     "idle",
   );
 
