@@ -66,7 +66,6 @@ interface FeedJob {
 interface ScheduleEntry {
   id?: number;
   time: string; // "HH:MM" 24hr
-  amount_grams: number;
   enabled?: boolean;
 }
 
@@ -201,7 +200,7 @@ app.put("/api/schedule", (req, res) => {
     for (const entry of schedule as ScheduleEntry[]) {
       insertEntry.run(
         entry.time,
-        Number(entry.amount_grams),
+        // Number(entry.amount_grams),
         entry.enabled === false ? 0 : 1,
       );
     }

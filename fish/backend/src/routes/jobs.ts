@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Job, JOB_TYPES, JobSource, JobType } from "../types";
+import { Job, JOB_TYPES, JobSource, JobType, ScheduleEntry } from "../types";
 import { JobsService } from "../services/jobs";
 import db from "../db/database";
 
@@ -36,11 +36,11 @@ router.get("/sync", (req, res) => {
     )
     .get() as Job | undefined;
 
-  // if (!job) {
-  //   return res.status(404).json({ error: "No queued jobs found" });
-  // }
+  const schedule = db
+    .prepare(`SELECT * FROM feeding_schedule ORDER BY time ASC LIMIT 1`)
+    .get() as ScheduleEntry | undefined;
 
-  res.json({ time: Date.now(), job, schedule: undefined });
+  res.json({ time: Date.now() / 1000, job, schedule: schedule?.time ?? "" });
 });
 
 /** Mark a job as complete */
