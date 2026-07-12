@@ -29,18 +29,18 @@ router.post("/", (req, res) => {
 });
 
 /** Return the job at the front of the queue */
-router.get("/current", (req, res) => {
+router.get("/sync", (req, res) => {
   const job = db
     .prepare(
       `SELECT * FROM feed_jobs WHERE status = 'queued' ORDER BY created_at ASC, id ASC LIMIT 1`,
     )
     .get() as Job | undefined;
 
-  if (!job) {
-    return res.status(404).json({ error: "No queued jobs found" });
-  }
+  // if (!job) {
+  //   return res.status(404).json({ error: "No queued jobs found" });
+  // }
 
-  res.json(job);
+  res.json({ time: Date.now(), job, schedule: undefined });
 });
 
 /** Mark a job as complete */
