@@ -4,7 +4,6 @@ import { createRoot } from "react-dom/client";
 interface FeedJob {
   id: number;
   status: "queued" | "completed";
-  amount_grams: number;
   source: "manual" | "scheduled";
   created_at: string;
   completed_at: string | null;
@@ -12,7 +11,6 @@ interface FeedJob {
 
 interface ScheduleEntry {
   time: string;
-  amount_grams: number;
   enabled: boolean;
 }
 
@@ -109,7 +107,7 @@ function App() {
   async function refreshLatestJob() {
     setLatestJobError("");
     try {
-      const job = await api("/api/jobs/latest");
+      const job = await api("/api/jobs/sync");
       setLatestJob(job);
     } catch (err) {
       setLatestJob(null);
@@ -124,7 +122,6 @@ function App() {
       setSchedule(
         entries.map((e: any) => ({
           time: e.time,
-          amount_grams: e.amount_grams,
           enabled: !!e.enabled,
         })),
       );
@@ -187,10 +184,7 @@ function App() {
   }
 
   function addRow() {
-    setSchedule((prev) => [
-      ...prev,
-      { time: "08:00", amount_grams: 5, enabled: true },
-    ]);
+    setSchedule((prev) => [...prev, { time: "08:00", enabled: true }]);
   }
 
   function removeRow(index: number) {
@@ -230,33 +224,20 @@ function App() {
       </div>
 
       <section>
-        <h2>Queue a feed job</h2>
+        <h2>Manual Control</h2>
         <div className="row">
-          {/* <div>
-            <label htmlFor="amount">Amount (grams)</label>
-            <input
-              id="amount"
-              type="number"
-              min={1}
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
-            />
-          </div> */}
-          <button onClick={seekLeft}>{"< Seek"}</button>
+          <button onClick={seekLeft}>{"< Tune"}</button>
           <button onClick={feed}>Feed</button>
-          <button onClick={seekRight}>{"Seek >"}</button>
+          <button onClick={seekRight}>{"Tune >"}</button>
         </div>
         {queueResult && <div className="status-box">{queueResult}</div>}
       </section>
 
       <section>
-        <h2>Current job</h2>
+        <h2>Current Data</h2>
         <div className="row">
           <button className="secondary" onClick={refreshLatestJob}>
             Refresh
-          </button>
-          <button onClick={completeJob} disabled={!latestJob}>
-            Mark complete
           </button>
         </div>
         <div className="status-box">
@@ -272,7 +253,6 @@ function App() {
           <thead>
             <tr>
               <th>Time</th>
-              <th>Amount (g)</th>
               <th>Enabled</th>
               <th></th>
             </tr>
@@ -285,17 +265,6 @@ function App() {
                     type="time"
                     value={entry.time}
                     onChange={(e) => updateRow(i, "time", e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    min={1}
-                    style={{ width: 70 }}
-                    value={entry.amount_grams}
-                    onChange={(e) =>
-                      updateRow(i, "amount_grams", Number(e.target.value))
-                    }
                   />
                 </td>
                 <td>
