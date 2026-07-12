@@ -67,6 +67,21 @@ router.get("/sync", (req, res) => {
   });
 });
 
+router.get("/history", (req, res) => {
+  const jobs = db
+    .prepare(
+      `SELECT * FROM feed_jobs WHERE status = 'queued' ORDER BY created_at DESC, id DESC`,
+    )
+    .all() as Job[] | undefined;
+
+  if (jobs == undefined) {
+    return res.status(400).json({
+      error: "Failed to load jobs",
+    });
+  }
+  res.json(jobs);
+});
+
 /** Mark a job as complete */
 router.patch("/:id/complete", (req, res) => {
   const id = Number(req.params.id);

@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 
-interface FeedJob {
+export type Job = {
   id: number;
-  status: "queued" | "completed";
-  source: "manual" | "scheduled";
-  created_at: string;
-  completed_at: string | null;
-}
+  type: string;
+  status: string;
+  source: string;
+  created_at: string; // '%Y-%m-%dT%H:%M:%fZ
+  completed_at: string | null; // '%Y-%m-%dT%H:%M:%fZ
+};
 
 interface ScheduleEntry {
   time: string;
@@ -82,17 +83,17 @@ const styles = `
 `;
 
 function App() {
-  const [baseUrl, setBaseUrl] = useState("https://fish.lucahaverty.com");
+  // const [baseUrl] = useState("https://fish.lucahaverty.com");
+  const [baseUrl] = useState("http://localhost:5000");
 
-  const [queueResult, setQueueResult] = useState("");
+  const [_, setQueueResult] = useState("");
 
-  const [latestJob, setLatestJob] = useState<FeedJob | null>(null);
+  const [latestJob, setLatestJob] = useState<Job | null>(null);
   const [latestJobError, setLatestJobError] = useState("");
   const [schedule, setSchedule] = useState<ScheduleEntry[]>([]);
+  const [history, setHistory] = useState<Job[]>([]);
   const [scheduleError, setScheduleError] = useState("");
-  const [_, setSaveStatus] = useState<"idle" | "saving" | "saved">(
-    "idle",
-  );
+  const [__, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
 
   // Prevents the autosave effect from firing when `schedule` was just
   // overwritten by data coming FROM the server (initial load, or the
@@ -111,7 +112,7 @@ function App() {
         })),
       );
     } catch (err) {
-      setScheduleError((err as Error).message);
+      setScheduleError("Failed to load schedule");
     }
   }
 
@@ -220,27 +221,41 @@ function App() {
       setTimeout(() => setSaveStatus("idle"), 1500);
     } catch (err) {
       setSaveStatus("idle");
-      setScheduleError((err as Error).message);
+      setScheduleError("Failed to save schedule");
     }
   }
+
+  async function loadHistory() {
+    // setScheduleError("");
+    try {
+      const entries = await api("/api/jobs/history");
+      console.log("LOADED HISTORY", entries);
+      // skipNextAutosave.current = true;
+      setHistory(entries);
+    } catch (err) {
+      // setScheduleError("Failed to load schedule");
+    }
+  }
+
+  useEffect(() => {
+    loadHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="app">
       <style>{styles}</style>
 
       <h1>Fish Autofeeder Control</h1>
-      <p className="subtitle">
-        Queue feedings, check job status, and manage the schedule.
-      </p>
 
       <div className="config">
-        <label htmlFor="baseUrl">Backend URL</label>
+        {/*<label htmlFor="baseUrl">Backend URL</label>
         <input
           id="baseUrl"
           type="text"
           value={baseUrl}
           onChange={(e) => setBaseUrl(e.target.value)}
-        />
+        /> */}
       </div>
 
       <section>
@@ -250,7 +265,7 @@ function App() {
           <button onClick={feed}>Feed</button>
           <button onClick={seekRight}>{"Tune >"}</button>
         </div>
-        {queueResult && <div className="status-box">{queueResult}</div>}
+        {/* {queueResult && <div className="status-box">{queueResult}</div>} */}
       </section>
 
       <section>
@@ -306,11 +321,36 @@ function App() {
         <button className="secondary" onClick={addRow}>
           Add time
         </button>
-        <button onClick={saveSchedule}>Save schedule</button>
-        <button className="secondary" onClick={loadSchedule}>
-          Reload from server
-        </button>
         {scheduleError && <div className="error">{scheduleError}</div>}
+      </section>
+
+      <section>
+        <h2>Feeding history</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Source</th>
+              <th>Completion Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {history.map((entry, i) => (
+              <tr key={i}>
+                <td>{entry.status}</td>
+                <td>{entry.type}</td>
+                <td>{entry.source}</td>
+                <td>{entry.completed_at}</td>
+                <td>
+                  <button className="danger" onClick={() => removeRow(i)}>
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </div>
   );
