@@ -1,0 +1,20 @@
+meta {
+  name: Template Current State
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BASE_URL}}/api/create-template
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"name": "MY TEMPLATE5", "replace": true}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

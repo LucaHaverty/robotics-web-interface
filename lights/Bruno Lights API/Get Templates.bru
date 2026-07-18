@@ -1,0 +1,16 @@
+meta {
+  name: Get Templates
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BASE_URL}}/api/templates
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

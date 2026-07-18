@@ -1,0 +1,29 @@
+meta {
+  name: Set State
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{BASE_URL}}/api/set-state
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "state": {
+      "ikeaWarm": 0,
+      "ikeaCool": 1,
+      "stringLights": true,
+      "ledR": 0.2,
+      "ledG": 0.3,
+      "ledB": 0.4
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
