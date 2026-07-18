@@ -57,3 +57,24 @@ Test with
 ssh -T git@github.com
 
 Clone repo
+
+# Running server with pm2
+(in backend server directory)
+npm install -g pm2
+npm run build
+pm2 start dist/index.js --name my-api
+
+Make it survive server reboots too
+
+pm2 startup (AND RUN THE COMMAND IT PRINTS)
+pm2 save
+
+Useful commands
+pm2 list
+pm2 logs my-api
+pm2 restart my-api
+pm2 stop my-api
+pm2 delete my-api
+
+To remove startup script
+pm2 unstartup systemd

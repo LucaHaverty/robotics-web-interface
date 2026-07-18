@@ -1,0 +1,20 @@
+meta {
+  name: Queue Feed Job
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BASE_URL}}/api/jobs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"type": "feed"}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
