@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Bruno Fish API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

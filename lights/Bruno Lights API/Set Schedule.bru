@@ -1,0 +1,26 @@
+meta {
+  name: Set Schedule
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{BASE_URL}}/api/schedule
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "schedule": [
+      { "time": "14:13", "amount_grams": 6 },
+      { "time": "15:19", "amount_grams": 4, "enabled": false },
+      { "time": "15:20", "amount_grams": 6 }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
