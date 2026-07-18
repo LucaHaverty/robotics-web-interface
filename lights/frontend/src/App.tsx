@@ -1,122 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import { useWebSocketContext } from "./context/web-sockets-context";
+import { Switch } from "@/components/ui/switch";
+import { BASE_URL } from "./helpers";
+import { initialState, type LightsState } from "../../backend/src/types";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { lastData } = useWebSocketContext();
+
+  // Local, optimistic copy of the toggle state
+  const [localData, setLocalData] = useState<LightsState>(initialState());
+
+  // Whenever the server pushes new data over the websocket, treat it as
+  // the source of truth and sync local state to it.
+  useEffect(() => {
+    if (lastData?.currentState.stringLights !== undefined) {
+      setLocalData(lastData.currentState);
+    }
+  }, [lastData]);
+
+  const handleToggle = async (checked: boolean) => {
+    // Optimistically update immediately so the UI feels responsive
+    const newState = { ...localData, stringLights: checked };
+    setLocalData(newState);
+
+    console.log(lastData);
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/set-state`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ state: newState }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Request failed: ${res.status} ${res.json()}`);
+      }
+      // No need to setStringLights here — the websocket "dashboard-update"
+      // message will come in and reconcile state via the useEffect above.
+    } catch (err) {
+      console.error("Failed to set state:", err);
+      // Revert optimistic update on failure since we won't get a
+      // websocket confirmation for a request that never succeeded
+      // TODO: should I revert? Probably not
+      //   setStringLights(!checked);
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    <Switch checked={localData.stringLights} onCheckedChange={handleToggle} />
+  );
 }
 
-export default App
+export default App;

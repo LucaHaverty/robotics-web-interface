@@ -1,6 +1,5 @@
 import app from "./app";
-
-import "./db/schema";
+import "./ws/websockets";
 
 app.listen(5001, () => {
   console.log("Server started");
