@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { isDev } from "../helpers";
 import type { DBContents } from "../../../backend/src/types";
 
 interface WebSocketContextType {
@@ -28,7 +27,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     // Instantiate connection once on component mount
     const ws = new WebSocket(
-      isDev ? "ws://localhost:8080" : "wss://lights.lucahaverty.com",
+ 	"wss://lights.lucahaverty.com/ws",
     );
     socketRef.current = ws;
 
