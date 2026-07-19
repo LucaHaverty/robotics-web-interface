@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import type { DBContents } from "../../../backend/src/types";
+import { WS_URL } from "@/helpers";
 
 interface WebSocketContextType {
   sendMessage: (message: any) => void;
@@ -26,9 +27,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     // Instantiate connection once on component mount
-    const ws = new WebSocket(
- 	"wss://lights.lucahaverty.com/ws",
-    );
+    const ws = new WebSocket(WS_URL);
     socketRef.current = ws;
 
     ws.onopen = () => setIsConnected(true);

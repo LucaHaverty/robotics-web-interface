@@ -1,11 +1,11 @@
 {
   "currentState": {
     "ikeaWarm": 0,
-    "ikeaCool": 1,
+    "ikeaCool": 0,
     "stringLights": false,
-    "ledR": 0.2,
-    "ledG": 0.3,
-    "ledB": 0.4
+    "ledR": 0.13,
+    "ledG": 0,
+    "ledB": 0
   },
   "templates": [
     {
