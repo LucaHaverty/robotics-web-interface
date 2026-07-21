@@ -2,22 +2,11 @@
   "currentState": {
     "ikeaWarm": 0,
     "ikeaCool": 0,
-    "stringLights": false,
-    "ledR": 0.13,
-    "ledG": 0,
-    "ledB": 0
+    "stringLights": true,
+    "ledR": 0.24,
+    "ledG": 0.23,
+    "ledB": 0.22
   },
-  "templates": [
-    {
-      "name": "MY TEMPLATE",
-      "state": {
-        "ikeaWarm": 0,
-        "ikeaCool": 0,
-        "stringLights": false,
-        "ledR": 0,
-        "ledG": 0,
-        "ledB": 0
-      }
-    }
-  ]
+  "templates": [],
+  "appliedTemplate": "Test"
 }

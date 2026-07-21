@@ -1,0 +1,22 @@
+meta {
+  name: Apply Template
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{BASE_URL}}/api/apply-template
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "MY TEMPLATE5"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
