@@ -66,7 +66,7 @@ pm2 start dist/index.js --name my-api
 
 Make it survive server reboots too
 
-pm2 startup (AND RUN THE COMMAND IT PRINTS)
+pm2 startup (AND RUN THE COMMAND IT PRINTS, ONCE PER SERVER NOT PER PROJECT)
 pm2 save
 
 Useful commands
