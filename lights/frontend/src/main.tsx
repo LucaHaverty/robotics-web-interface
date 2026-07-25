@@ -2,11 +2,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { WebSocketProvider } from "./context/web-sockets-context";
 import App from "./App";
+import { ThemeProvider } from "./components/theme-provider";
 
 function Main() {
   return (
     <WebSocketProvider>
-      <App></App>
+      <ThemeProvider>
+        <App></App>
+      </ThemeProvider>
     </WebSocketProvider>
   );
 }

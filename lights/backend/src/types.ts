@@ -10,12 +10,14 @@ export type Template = {
 };
 
 export type LightsState = {
-  ikeaWarm: number;
-  ikeaCool: number;
   stringLights: boolean;
-  ledR: number;
-  ledG: number;
-  ledB: number;
+  hue: number;
+  saturation: number;
+  value: number;
+  warmWhite1: number;
+  coolWhite1: number;
+  warmWhite2: number;
+  coolWhite2: number;
 };
 
 export function newDb() {
@@ -28,11 +30,13 @@ export function newDb() {
 
 export function initialState() {
   return {
-    ikeaWarm: 0,
-    ikeaCool: 0,
     stringLights: false,
-    ledR: 0,
-    ledG: 0,
-    ledB: 0,
+    hue: 0,
+    saturation: 0,
+    value: 0,
+    warmWhite1: 0,
+    coolWhite1: 0,
+    warmWhite2: 0,
+    coolWhite2: 0,
   } satisfies LightsState;
 }

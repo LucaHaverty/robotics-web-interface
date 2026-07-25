@@ -1,12 +1,27 @@
 {
   "currentState": {
-    "ikeaWarm": 0,
-    "ikeaCool": 0,
-    "stringLights": true,
-    "ledR": 0.24,
-    "ledG": 0.23,
-    "ledB": 0.22
+    "stringLights": false,
+    "hue": 0,
+    "saturation": 0,
+    "value": 0,
+    "warmWhite1": 0,
+    "coolWhite1": 0,
+    "warmWhite2": 0,
+    "coolWhite2": 0
   },
-  "templates": [],
-  "appliedTemplate": "Test"
+  "templates": [
+    {
+      "name": "warmth",
+      "state": {
+        "stringLights": true,
+        "hue": 43.2,
+        "saturation": 1,
+        "value": 1,
+        "warmWhite1": 1,
+        "coolWhite1": 0,
+        "warmWhite2": 1,
+        "coolWhite2": 0
+      }
+    }
+  ]
 }
