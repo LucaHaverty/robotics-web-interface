@@ -1,13 +1,13 @@
 {
   "currentState": {
     "stringLights": true,
-    "hue": 212.4,
-    "saturation": 0.78,
-    "value": 0.84,
-    "warmWhite1": 0.46,
-    "coolWhite1": 0.57,
-    "warmWhite2": 1,
-    "coolWhite2": 1
+    "hue": 39.6,
+    "saturation": 0.62,
+    "value": 0.68,
+    "warmWhite1": 0.9,
+    "coolWhite1": 0.54,
+    "warmWhite2": 0.7,
+    "coolWhite2": 0.63
   },
   "templates": [
     {
@@ -63,5 +63,5 @@
       }
     }
   ],
-  "appliedTemplate": "Project"
+  "appliedTemplate": "Work"
 }

@@ -16,6 +16,8 @@ interface WebSocketContextType {
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
 
+const RECONNECT_INTERVAL_MS = 3000;
+
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -24,29 +26,53 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // useRef keeps the exact same socket reference across re-renders without re-instantiating
   const socketRef = useRef<WebSocket | null>(null);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const isUnmountedRef = useRef(false);
 
   useEffect(() => {
-    // Instantiate connection once on component mount
-    const ws = new WebSocket(WS_URL);
-    socketRef.current = ws;
+    isUnmountedRef.current = false;
 
-    ws.onopen = () => setIsConnected(true);
-    ws.onclose = () => setIsConnected(false);
-    ws.onmessage = (event: MessageEvent) => {
-      console.log(event);
-      const data = JSON.parse(event.data);
+    const connect = () => {
+      const ws = new WebSocket(WS_URL);
+      socketRef.current = ws;
 
-      if (data.type == "connected") {
-        console.log("CONNECTION EVENT");
-      }
+      ws.onopen = () => setIsConnected(true);
 
-      console.log(data);
-      if (data.type == "dashboard-update") setLastData(data.content);
+      ws.onclose = () => {
+        setIsConnected(false);
+        // Don't try to reconnect if the provider itself unmounted
+        if (!isUnmountedRef.current) {
+          reconnectTimeoutRef.current = setTimeout(
+            connect,
+            RECONNECT_INTERVAL_MS,
+          );
+        }
+      };
+
+      ws.onmessage = (event: MessageEvent) => {
+        console.log(event);
+        const data = JSON.parse(event.data);
+
+        if (data.type == "connected") {
+          console.log("CONNECTION EVENT");
+        }
+
+        console.log(data);
+        if (data.type == "dashboard-update") setLastData(data.content);
+      };
     };
 
-    // Cleanup: Close connection when the whole app/provider unmounts
+    connect();
+
+    // Cleanup: Close connection and stop any pending reconnect when the provider unmounts
     return () => {
-      ws.close();
+      isUnmountedRef.current = true;
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+      socketRef.current?.close();
     };
   }, []);
 
