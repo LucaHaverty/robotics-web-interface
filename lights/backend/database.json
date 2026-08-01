@@ -9,19 +9,6 @@
     "warmWhite2": 0,
     "coolWhite2": 0
   },
-  "templates": [
-    {
-      "name": "warmth",
-      "state": {
-        "stringLights": true,
-        "hue": 43.2,
-        "saturation": 1,
-        "value": 1,
-        "warmWhite1": 1,
-        "coolWhite1": 0,
-        "warmWhite2": 1,
-        "coolWhite2": 0
-      }
-    }
-  ]
+  "templates": [],
+  "appliedTemplate": "Off"
 }

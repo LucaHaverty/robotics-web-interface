@@ -79,13 +79,16 @@ function App() {
     });
   };
 
-  const deleteTemplate = async (template: Template) => {
-    await fetch(`${BASE_URL}/api/delete-template`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: template.name }),
-    });
-  };
+const deleteTemplate = async (template: Template) => {
+  const confirmed = window.confirm(`Delete preset "${template.name}"?`);
+  if (!confirmed) return;
+
+  await fetch(`${BASE_URL}/api/delete-template`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: template.name }),
+  });
+};
 
   const newTemplate = async () => {
     const name = prompt("Preset name");
