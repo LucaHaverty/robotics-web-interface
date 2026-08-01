@@ -1,14 +1,27 @@
 {
   "currentState": {
-    "stringLights": false,
-    "hue": 0,
-    "saturation": 0,
-    "value": 0,
+    "stringLights": true,
+    "hue": 46.800000000000004,
+    "saturation": 0.64,
+    "value": 0.7,
     "warmWhite1": 0,
     "coolWhite1": 0,
     "warmWhite2": 0,
     "coolWhite2": 0
   },
-  "templates": [],
-  "appliedTemplate": "Off"
+  "templates": [
+    {
+      "name": "Off",
+      "state": {
+        "stringLights": false,
+        "hue": 0,
+        "saturation": 0,
+        "value": 0,
+        "warmWhite1": 0,
+        "coolWhite1": 0,
+        "warmWhite2": 0,
+        "coolWhite2": 0
+      }
+    }
+  ]
 }

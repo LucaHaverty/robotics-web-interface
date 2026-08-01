@@ -240,7 +240,7 @@ const deleteTemplate = async (template: Template) => {
                   }}
                 />
                 <span className="font-['Space_Grotesk'] text-sm font-medium">
-                  White A
+                  Ring Light
                 </span>
               </div>
 
@@ -273,7 +273,7 @@ const deleteTemplate = async (template: Template) => {
                   }}
                 />
                 <span className="font-['Space_Grotesk'] text-sm font-medium">
-                  White B
+                  Desk Light
                 </span>
               </div>
 
