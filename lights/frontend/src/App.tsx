@@ -40,7 +40,7 @@ function whiteMixCss(warm: number, cool: number) {
   // const total = warm + cool || 1;
   // const mixed = warmBase.map((w, i) => (w * warm + coolBase[i] * cool) / total);
   const mixed = warmBase.map((w, i) => {
-    return w * warm + coolBase[i] * cool;
+    return w * (warm*0.7) + coolBase[i] * (cool*0.7);
   });
   return `rgb(${mixed.map((c) => Math.round(c)).join(", ")})`;
 }
