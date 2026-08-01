@@ -1,4 +1,3 @@
-// panels/template.tsx
 import { Trash2Icon } from "lucide-react";
 import type { Template } from "../../../backend/src/types";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,16 +19,14 @@ export function TemplateCard({
     <Card
       size="sm"
       onClick={onClick}
-      className={`group relative flex w-fit min-w-36 cursor-pointer flex-row items-center gap-3 rounded-xl border bg-[#1C1922] px-4 py-3 transition-all duration-200 hover:border-[#9C8CFF]/60 ${
-        active
-          ? "border-[#9C8CFF] shadow-[0_0_0_1px_rgba(156,140,255,0.4)]"
-          : "border-[#34303F]"
-      }`}
+      className={`ring-0 group relative flex w-fit min-w-36 cursor-pointer flex-row items-center gap-3 rounded-xl border bg-[#1C1922] px-4 py-3 transition-all duration-200 hover:border-[#aea3ba]/60 ${
+        active ? "border-[#aea3ba]" : "border-[#34303F]"
+      } shadow-none`}
     >
       <CardContent className="flex flex-1 items-center gap-2 p-0">
         <span
           className={`size-2 rounded-full transition-colors duration-200 ${
-            active ? "bg-[#9C8CFF]" : "bg-[#34303F]"
+            active ? "bg-[#aea3ba]" : "bg-[#34303F]"
           }`}
         />
         <p className="text-sm">{template.name}</p>

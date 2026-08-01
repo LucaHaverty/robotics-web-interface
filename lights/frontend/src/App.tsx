@@ -40,7 +40,7 @@ function whiteMixCss(warm: number, cool: number) {
   // const total = warm + cool || 1;
   // const mixed = warmBase.map((w, i) => (w * warm + coolBase[i] * cool) / total);
   const mixed = warmBase.map((w, i) => {
-    return w * (warm*0.7) + coolBase[i] * (cool*0.7);
+    return w * (warm * 0.7) + coolBase[i] * (cool * 0.7);
   });
   return `rgb(${mixed.map((c) => Math.round(c)).join(", ")})`;
 }
@@ -79,16 +79,16 @@ function App() {
     });
   };
 
-const deleteTemplate = async (template: Template) => {
-  const confirmed = window.confirm(`Delete preset "${template.name}"?`);
-  if (!confirmed) return;
+  const deleteTemplate = async (template: Template) => {
+    const confirmed = window.confirm(`Delete preset "${template.name}"?`);
+    if (!confirmed) return;
 
-  await fetch(`${BASE_URL}/api/delete-template`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: template.name }),
-  });
-};
+    await fetch(`${BASE_URL}/api/delete-template`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: template.name }),
+    });
+  };
 
   const newTemplate = async () => {
     const name = prompt("Preset name");
@@ -137,7 +137,7 @@ const deleteTemplate = async (template: Template) => {
       <div className="mx-auto flex max-w-4xl flex-col gap-10">
         {/* Presets */}
         <section className="flex flex-col gap-4">
-          <p className="font-['Space_Grotesk'] text-xs font-medium uppercase tracking-[0.2em] text-[#8B85A0]">
+          <p className="font-['Space_Grotesk'] text-xs font-medium uppercase tracking-[0.2em] text-[#aea3ba]">
             Presets
           </p>
           <div className="flex flex-wrap gap-3">
@@ -152,7 +152,7 @@ const deleteTemplate = async (template: Template) => {
             ))}
             <button
               onClick={() => newTemplate()}
-              className="flex items-center gap-2 rounded-xl border border-dashed border-[#34303F] px-4 py-3 text-sm text-[#8B85A0] transition-colors duration-200 hover:border-[#9C8CFF] hover:text-[#EDE9F7]"
+              className="flex items-center gap-2 rounded-xl border border-dashed border-[#34303F] px-4 py-3 text-sm text-[#aea3ba] transition-colors duration-200 hover:border-[#aea3ba] hover:text-[#EDE9F7]"
             >
               <PlusIcon className="size-4" />
               New Preset
@@ -162,8 +162,8 @@ const deleteTemplate = async (template: Template) => {
 
         {/* Console */}
         <section className="flex flex-col gap-4">
-          <p className="font-['Space_Grotesk'] text-xs font-medium uppercase tracking-[0.2em] text-[#8B85A0]">
-            Console
+          <p className="font-['Space_Grotesk'] text-xs font-medium uppercase tracking-[0.2em] text-[#aea3ba]">
+            Configuration
           </p>
 
           {/* String lights — its own widget: a single boolean device, kept
