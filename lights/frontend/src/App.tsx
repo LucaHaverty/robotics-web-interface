@@ -208,7 +208,6 @@ function App() {
                 <HueSlider
                   hue={hue}
                   hueColor={hueColor}
-                  onChange={(h) => updateField("hue", h, false)}
                   onCommit={(h) => updateField("hue", h, true)}
                 />
                 <GradientSlider
@@ -216,14 +215,12 @@ function App() {
                   fromCss={satLowCss}
                   toCss={satHighCss}
                   value={saturation}
-                  onChange={(s) => updateField("saturation", s, false)}
                   onCommit={(s) => updateField("saturation", s, true)}
                 />
                 <ChannelSlider
                   label="Brightness"
                   color="#D8D3E8"
                   value={value}
-                  onChange={(v) => updateField("value", v, false)}
                   onCommit={(v) => updateField("value", v, true)}
                 />
               </div>
@@ -249,14 +246,12 @@ function App() {
                   label="Warm"
                   color="#FFB870"
                   value={warmWhite1}
-                  onChange={(v) => updateField("warmWhite1", v, false)}
                   onCommit={(v) => updateField("warmWhite1", v, true)}
                 />
                 <ChannelSlider
                   label="Cool"
                   color="#7FD8FF"
                   value={coolWhite1}
-                  onChange={(v) => updateField("coolWhite1", v, false)}
                   onCommit={(v) => updateField("coolWhite1", v, true)}
                 />
               </div>
@@ -282,14 +277,12 @@ function App() {
                   label="Warm"
                   color="#FFB870"
                   value={warmWhite2}
-                  onChange={(v) => updateField("warmWhite2", v, false)}
                   onCommit={(v) => updateField("warmWhite2", v, true)}
                 />
                 <ChannelSlider
                   label="Cool"
                   color="#7FD8FF"
                   value={coolWhite2}
-                  onChange={(v) => updateField("coolWhite2", v, false)}
                   onCommit={(v) => updateField("coolWhite2", v, true)}
                 />
               </div>
@@ -306,13 +299,11 @@ function ChannelSlider({
   label,
   color,
   value,
-  onChange,
   onCommit,
 }: {
   label: string;
   color: string;
   value: number;
-  onChange: (v: number) => void;
   onCommit: (v: number) => void;
 }) {
   const toNumeric = (raw: number | readonly number[]) =>
@@ -330,7 +321,7 @@ function ChannelSlider({
       </span>
       <Slider
         value={pct}
-        onValueChange={(raw) => onChange(toNumeric(raw))}
+        onValueChange={(raw) => onCommit(toNumeric(raw))}
         onValueCommitted={(raw) => onCommit(toNumeric(raw))}
         max={100}
         step={1}
@@ -348,12 +339,10 @@ function ChannelSlider({
 function HueSlider({
   hue,
   hueColor,
-  onChange,
   onCommit,
 }: {
   hue: number;
   hueColor: string;
-  onChange: (h: number) => void;
   onCommit: (h: number) => void;
 }) {
   const toHue = (raw: number | readonly number[]) =>
@@ -367,7 +356,7 @@ function HueSlider({
       </span>
       <Slider
         value={pct}
-        onValueChange={(raw) => onChange(toHue(raw))}
+        onValueChange={(raw) => onCommit(toHue(raw))}
         onValueCommitted={(raw) => onCommit(toHue(raw))}
         max={100}
         step={1}
@@ -391,14 +380,12 @@ function GradientSlider({
   fromCss,
   toCss,
   value,
-  onChange,
   onCommit,
 }: {
   label: string;
   fromCss: string;
   toCss: string;
   value: number;
-  onChange: (v: number) => void;
   onCommit: (v: number) => void;
 }) {
   const toNumeric = (raw: number | readonly number[]) =>
@@ -412,7 +399,7 @@ function GradientSlider({
       </span>
       <Slider
         value={pct}
-        onValueChange={(raw) => onChange(toNumeric(raw))}
+        onValueChange={(raw) => onCommit(toNumeric(raw))}
         onValueCommitted={(raw) => onCommit(toNumeric(raw))}
         max={100}
         step={1}

@@ -1,13 +1,13 @@
 {
   "currentState": {
-    "stringLights": true,
-    "hue": 212.4,
-    "saturation": 0.78,
-    "value": 0.84,
-    "warmWhite1": 0.46,
-    "coolWhite1": 0.57,
-    "warmWhite2": 1,
-    "coolWhite2": 1
+    "stringLights": false,
+    "hue": 201.6,
+    "saturation": 0.46,
+    "value": 0,
+    "warmWhite1": 0.8,
+    "coolWhite1": 0.33,
+    "warmWhite2": 0,
+    "coolWhite2": 0
   },
   "templates": [
     {
@@ -61,7 +61,19 @@
         "warmWhite2": 1,
         "coolWhite2": 1
       }
+    },
+    {
+      "name": "Purple",
+      "state": {
+        "stringLights": false,
+        "hue": 259.2,
+        "saturation": 1,
+        "value": 0.48,
+        "warmWhite1": 0,
+        "coolWhite1": 0,
+        "warmWhite2": 0,
+        "coolWhite2": 0
+      }
     }
-  ],
-  "appliedTemplate": "Project"
+  ]
 }
