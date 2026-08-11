@@ -18,6 +18,26 @@ router.get("/state", (req, res) => {
   res.status(200).json(state);
 });
 
+router.post("/toggle", (req, res) => {
+  const name: string = req.body.name;
+
+  if (name == undefined) {
+    return res.status(400).json({
+      error: "Invalid body.name",
+    });
+  }
+
+  const result = db.toggleTemplate(name);
+
+  if (isError(result)) {
+    return res.status(400).json({
+      result,
+    });
+  }
+
+  res.status(200).json(result);
+});
+
 router.get("/templates", (req, res) => {
   res.status(200).json(db.getTemplates());
 });

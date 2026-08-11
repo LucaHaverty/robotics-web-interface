@@ -1,11 +1,11 @@
 {
   "currentState": {
     "stringLights": false,
-    "hue": 201.6,
-    "saturation": 0.46,
+    "hue": 0,
+    "saturation": 0,
     "value": 0,
-    "warmWhite1": 0.8,
-    "coolWhite1": 0.33,
+    "warmWhite1": 0,
+    "coolWhite1": 0,
     "warmWhite2": 0,
     "coolWhite2": 0
   },
@@ -75,5 +75,6 @@
         "coolWhite2": 0
       }
     }
-  ]
+  ],
+  "appliedTemplate": "Off"
 }

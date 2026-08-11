@@ -86,7 +86,32 @@ class Database {
     return this.data;
   }
 
-  public applyTemplate(name: string): Template | string {
+  public toggleTemplate(name: string): Template | string {
+  if (!this.data) return "Database not loaded";
+
+	  const template = this.data.templates.find((t) => t.name == name);
+	  if (template == undefined) {
+	    return `Template with name ${name} not found`;
+	  }
+
+	  let templateToApply = template;
+
+	  console.log(this.data.appliedTemplate);
+	  if (this.data.appliedTemplate === template.name) {
+	    const offTemplate = this.data.templates.find((t) => t.name == "Off");
+	    if (offTemplate == undefined) {
+	      return `Template with name Off not found`;
+	    }
+	    templateToApply = offTemplate;
+	  }
+
+	  this.data.appliedTemplate = templateToApply.name;
+	  this.data.currentState = { ...templateToApply.state };
+	  this.write();
+	  return templateToApply;
+	}
+
+	  public applyTemplate(name: string): Template | string {
     if (!this.data) return "Database not loaded";
 
     const template = this.data.templates.find((t) => t.name == name);
