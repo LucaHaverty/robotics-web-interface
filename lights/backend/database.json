@@ -1,15 +1,41 @@
 {
   "currentState": {
-    "stringLights": false,
-    "hue": 0,
-    "saturation": 0,
-    "value": 0,
-    "warmWhite1": 0,
-    "coolWhite1": 0,
-    "warmWhite2": 0,
+    "stringLights": true,
+    "hue": 266.40000000000003,
+    "saturation": 1,
+    "value": 0.84,
+    "warmWhite1": 0.49,
+    "coolWhite1": 0.1,
+    "warmWhite2": 0.07,
     "coolWhite2": 0
   },
   "templates": [
+    {
+      "name": "Purple",
+      "state": {
+        "stringLights": false,
+        "hue": 259.2,
+        "saturation": 1,
+        "value": 0.48,
+        "warmWhite1": 0,
+        "coolWhite1": 0,
+        "warmWhite2": 0,
+        "coolWhite2": 0
+      }
+    },
+    {
+      "name": "String",
+      "state": {
+        "stringLights": true,
+        "hue": 0,
+        "saturation": 0,
+        "value": 0,
+        "warmWhite1": 0,
+        "coolWhite1": 0,
+        "warmWhite2": 0,
+        "coolWhite2": 0
+      }
+    },
     {
       "name": "Off",
       "state": {
@@ -24,16 +50,42 @@
       }
     },
     {
+      "name": "Night",
+      "state": {
+        "stringLights": false,
+        "hue": 10.8,
+        "saturation": 1,
+        "value": 0.24,
+        "warmWhite1": 0.06,
+        "coolWhite1": 0,
+        "warmWhite2": 0,
+        "coolWhite2": 0
+      }
+    },
+    {
       "name": "Work",
       "state": {
         "stringLights": true,
-        "hue": 39.6,
-        "saturation": 0.62,
-        "value": 0.68,
-        "warmWhite1": 0.9,
-        "coolWhite1": 0.54,
-        "warmWhite2": 0.7,
-        "coolWhite2": 0.63
+        "hue": 7.2,
+        "saturation": 1,
+        "value": 1,
+        "warmWhite1": 0.37,
+        "coolWhite1": 0,
+        "warmWhite2": 0.12,
+        "coolWhite2": 0.05
+      }
+    },
+    {
+      "name": "Work2",
+      "state": {
+        "stringLights": true,
+        "hue": 201.6,
+        "saturation": 0.69,
+        "value": 1,
+        "warmWhite1": 0,
+        "coolWhite1": 0.64,
+        "warmWhite2": 0,
+        "coolWhite2": 0.13
       }
     },
     {
@@ -41,12 +93,25 @@
       "state": {
         "stringLights": true,
         "hue": 266.40000000000003,
-        "saturation": 0.62,
+        "saturation": 1,
         "value": 0.84,
         "warmWhite1": 0.49,
         "coolWhite1": 0.1,
-        "warmWhite2": 0.36,
-        "coolWhite2": 0.08
+        "warmWhite2": 0.07,
+        "coolWhite2": 0
+      }
+    },
+    {
+      "name": "Chilling2",
+      "state": {
+        "stringLights": false,
+        "hue": 342,
+        "saturation": 1,
+        "value": 0.84,
+        "warmWhite1": 0.21,
+        "coolWhite1": 0,
+        "warmWhite2": 0.07,
+        "coolWhite2": 0
       }
     },
     {
@@ -56,25 +121,38 @@
         "hue": 212.4,
         "saturation": 0.78,
         "value": 0.84,
-        "warmWhite1": 0.46,
-        "coolWhite1": 0.57,
-        "warmWhite2": 1,
-        "coolWhite2": 1
+        "warmWhite1": 0.32,
+        "coolWhite1": 0.16,
+        "warmWhite2": 0.12,
+        "coolWhite2": 0.27
       }
     },
     {
-      "name": "Purple",
+      "name": "Desk",
       "state": {
         "stringLights": false,
-        "hue": 259.2,
-        "saturation": 1,
-        "value": 0.48,
-        "warmWhite1": 0,
+        "hue": 0,
+        "saturation": 0,
+        "value": 0,
+        "warmWhite1": 0.13,
         "coolWhite1": 0,
-        "warmWhite2": 0,
+        "warmWhite2": 0.06,
+        "coolWhite2": 0
+      }
+    },
+    {
+      "name": "Celia’s Study",
+      "state": {
+        "stringLights": true,
+        "hue": 244.8,
+        "saturation": 0.59,
+        "value": 1,
+        "warmWhite1": 0.32,
+        "coolWhite1": 0.08,
+        "warmWhite2": 0.07,
         "coolWhite2": 0
       }
     }
   ],
-  "appliedTemplate": "Off"
+  "appliedTemplate": "Chilling"
 }
